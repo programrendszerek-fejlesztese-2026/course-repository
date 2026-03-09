@@ -1,0 +1,17 @@
+# Angular development Dockerfile
+FROM node:24-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Install Angular CLI globally
+RUN npm install -g @angular/cli
+
+# Install additional tools (optional)
+RUN apk add --no-cache git
+
+# Expose default Angular port
+EXPOSE 4200
+
+# Default command: start a shell
+CMD ["sh"]

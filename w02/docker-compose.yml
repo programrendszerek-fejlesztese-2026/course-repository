@@ -1,0 +1,45 @@
+version: '3.9'
+services:
+  angular:
+    build:
+      context: .
+      dockerfile: Dockerfile.angular
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./project/angular-app:/app
+    networks:
+      - devnet
+    working_dir: /app
+    command: ng serve --host 0.0.0.0
+
+  express:
+    build:
+      context: .
+      dockerfile: Dockerfile.express
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./project/express-app:/app
+    networks:
+      - devnet
+    working_dir: /app
+    command: sh -c "npm install && node index.js"
+
+  mongo:
+    build:
+      context: .
+      dockerfile: Dockerfile.mongo
+    ports:
+      - "27017:27017"
+    networks:
+      - devnet
+    volumes:
+      - mongo-data:/data/db
+
+networks:
+  devnet:
+    driver: bridge
+
+volumes:
+  mongo-data:

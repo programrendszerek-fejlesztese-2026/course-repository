@@ -1,0 +1,14 @@
+# Node.js Express backend Dockerfile
+FROM node:24-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Install dependencies (optional, for development)
+RUN apk add --no-cache git
+
+# Expose default Express port
+EXPOSE 3000
+
+# Default command: start a shell
+CMD ["sh"]
