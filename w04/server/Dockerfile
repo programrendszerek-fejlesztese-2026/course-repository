@@ -1,16 +1,16 @@
-# Use official Node.js LTS image
+# Node.js dev environment
 FROM node:24
 
-# Set working directory
-WORKDIR /usr/src/app
+ARG UID=1000
+ARG GID=1000
 
-RUN chown -R node:node /usr/src/app
+# Match container 'node' user to host user's UID/GID
+RUN groupmod -g $GID node && usermod -u $UID -g $GID node
 
-# Expose port 3000 for development
-EXPOSE 3000
+WORKDIR /app
 
-# Switch to non-root user for development
 USER node
 
-# Default command: keep container running for interactive use
+EXPOSE 3000
+
 CMD ["/bin/bash"]
