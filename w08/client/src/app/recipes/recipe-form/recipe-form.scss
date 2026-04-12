@@ -1,0 +1,74 @@
+.recipe-form {
+	max-width: 780px;
+	margin: var(--space-xxl) auto;
+	padding: var(--space-md);
+	background: var(--color-surface);
+	border-radius: var(--radius-md);
+	box-shadow: var(--shadow-1);
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-md);
+
+	.title {
+		margin: 0 0 var(--space-sm) 0;
+		font-size: var(--h2-size);
+	}
+
+	.field {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-xs);
+	}
+
+	input,
+	textarea,
+	select {
+		padding: var(--space-sm);
+		border-radius: var(--radius-sm);
+		border: 1px solid rgba(0, 0, 0, 0.08);
+		background: transparent;
+		width: 100%;
+		box-sizing: border-box;
+	}
+
+	.ingredients {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-sm);
+
+		.ingredient-row {
+			display: flex;
+			gap: var(--space-sm);
+			align-items: center;
+
+			input {
+				flex: 1 1 auto;
+			}
+
+			.remove {
+				background: transparent;
+				border: none;
+				color: var(--color-warn);
+				cursor: pointer;
+			}
+		}
+	}
+
+	.actions {
+		display: flex;
+		gap: var(--space-sm);
+		justify-content: flex-end;
+	}
+
+	.btn {
+		padding: var(--space-xs) var(--space-md);
+		border-radius: var(--radius-sm);
+		border: none;
+		cursor: pointer;
+	}
+
+	.btn.primary {
+		background: var(--color-primary);
+		color: var(--color-primary-contrast);
+	}
+}

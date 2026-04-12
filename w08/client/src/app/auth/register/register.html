@@ -1,0 +1,45 @@
+<form [formGroup]="form" (ngSubmit)="register()" class="register-form">
+	<h2 class="title">Regisztráció</h2>
+
+	<div class="field">
+		<label for="username">Felhasználónév</label>
+		<input id="username" type="text" formControlName="username" placeholder="Felhasználónév" />
+		<div class="error" *ngIf="form.get('username')?.invalid && (form.get('username')?.touched || form.get('username')?.dirty)">
+			<small *ngIf="form.get('username')?.errors?.['required']">Felhasználónév megadása kötelező.</small>
+			<small *ngIf="form.get('username')?.errors?.['exists']">Ez a felhasználónév már foglalt.</small>
+		</div>
+	</div>
+
+	<div class="field">
+		<label for="email">Email</label>
+		<input id="email" type="email" formControlName="email" placeholder="email@example.com" />
+		<div class="error" *ngIf="form.get('email')?.invalid && (form.get('email')?.touched || form.get('email')?.dirty)">
+			<small *ngIf="form.get('email')?.errors?.['required']">Email megadása kötelező.</small>
+			<small *ngIf="form.get('email')?.errors?.['email']">Érvényes email cím szükséges.</small>
+			<small *ngIf="form.get('email')?.errors?.['exists']">Ez az email már regisztrálva van.</small>
+		</div>
+	</div>
+
+	<div class="field">
+		<label for="password">Jelszó</label>
+		<input id="password" type="password" formControlName="password" placeholder="Jelszó" />
+		<div class="error" *ngIf="form.get('password')?.invalid && (form.get('password')?.touched || form.get('password')?.dirty)">
+			<small *ngIf="form.get('password')?.errors?.['required']">Jelszó megadása kötelező.</small>
+			<small *ngIf="form.get('password')?.errors?.['minlength']">A jelszónak legalább 6 karakter hosszúnak kell lennie.</small>
+		</div>
+	</div>
+
+	<div class="field">
+		<label for="confirmPassword">Jelszó ismét</label>
+		<input id="confirmPassword" type="password" formControlName="confirmPassword" placeholder="Jelszó ismét" />
+		<div class="error" *ngIf="form.get('confirmPassword')?.invalid && (form.get('confirmPassword')?.touched || form.get('confirmPassword')?.dirty)">
+			<small *ngIf="form.get('confirmPassword')?.errors?.['required']">Ismételt jelszó megadása kötelező.</small>
+			<small *ngIf="form.get('confirmPassword')?.errors?.['mismatch']">A jelszavak nem egyeznek.</small>
+		</div>
+	</div>
+
+	<div class="actions">
+		<button type="submit" class="btn primary">Regisztráció</button>
+		<button type="button" class="btn" (click)="goToLogin()">Bejelentkezés</button>
+	</div>
+</form>

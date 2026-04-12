@@ -1,0 +1,13 @@
+/* Ratings list spacing and layout */
+.ratings {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-sm);
+}
+
+.ratings li {
+	margin: 0;
+}

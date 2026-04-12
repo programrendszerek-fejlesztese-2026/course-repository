@@ -1,0 +1,26 @@
+<section class="recipe-list">
+	<div class="header">
+		<h1 class="page-title">Receptek</h1>
+		<div class="actions">
+			<button type="button" class="btn logout" (click)="logout()">Kijelentkezés</button>
+			<button type="button" class="btn add" [routerLink]="['/recipes','new']">Új recept</button>
+		</div>
+	</div>
+
+	<p class="lead" *ngIf="recipes.length === 0">Nincsenek receptek jelenleg.</p>
+
+	<ul class="list" *ngIf="recipes.length > 0">
+		<li *ngFor="let r of recipes; trackBy: trackById" class="item">
+			<article class="card">
+				<h2 class="card-title">
+					<a [routerLink]="['/recipes', r.id]">{{ r.title }}</a>
+				</h2>
+				<p class="card-desc">{{ r.description }}</p>
+				<div class="card-meta">
+					<span class="category">{{ categoryMap.get(r.categoryId)?.name }}</span>
+					<span class="ingredients">{{ r.ingredients.length }} hozzávaló</span>
+				</div>
+			</article>
+		</li>
+	</ul>
+</section>

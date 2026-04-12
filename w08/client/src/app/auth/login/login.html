@@ -1,0 +1,25 @@
+<form [formGroup]="form" (ngSubmit)="login()" class="login-form">
+	<h2 class="title">Bejelentkezés</h2>
+
+	<div class="field">
+		<label for="email">Email</label>
+		<input id="email" type="email" formControlName="email" placeholder="email@example.com" />
+		<div class="error" *ngIf="email?.invalid && (email?.touched || email?.dirty)">
+			<small *ngIf="email?.errors?.['required']">Email megadása kötelező.</small>
+			<small *ngIf="email?.errors?.['email']">Érvényes email cím szükséges.</small>
+		</div>
+	</div>
+
+	<div class="field">
+		<label for="password">Jelszó</label>
+		<input id="password" type="password" formControlName="password" placeholder="Jelszó" />
+		<div class="error" *ngIf="password?.invalid && (password?.touched || password?.dirty)">
+			<small *ngIf="password?.errors?.['required']">Jelszó megadása kötelező.</small>
+		</div>
+	</div>
+
+	<div class="actions">
+		<button type="submit" class="btn primary">Bejelentkezés</button>
+		<button type="button" class="btn" (click)="goToRegister()">Regisztráció</button>
+	</div>
+</form>
