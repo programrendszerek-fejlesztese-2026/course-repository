@@ -1,0 +1,27 @@
+<section class="recipe-detail" *ngIf="recipe; else notFound">
+	<button class="back" (click)="goBack()">← Vissza a listához</button>
+
+	<h1 class="title">{{ recipe.title }}</h1>
+
+	<div class="meta">
+		<span class="category">{{ categoryName }}</span>
+		<span class="created">Létrehozva: {{ recipe.createdAt | date:'short' }}</span>
+		<span class="avg" *ngIf="averageScore() !== null">Átlag: {{ averageScore() }}/5</span>
+	</div>
+
+	<p class="description">{{ recipe.description }}</p>
+
+	<h3>Hozzávalók</h3>
+	<app-ingredient-list [ingredients]="recipe.ingredients"></app-ingredient-list>
+
+	<h3>Értékelések</h3>
+	<app-rating-list [ratings]="ratings"></app-rating-list>
+	<app-rating-form [recipeId]="recipe.id" (saved)="onRatingSaved($event)"></app-rating-form>
+</section>
+
+<ng-template #notFound>
+	<div class="not-found">
+		<p>Recept nem található.</p>
+		<button class="btn" (click)="goBack()">Vissza a listához</button>
+	</div>
+</ng-template>

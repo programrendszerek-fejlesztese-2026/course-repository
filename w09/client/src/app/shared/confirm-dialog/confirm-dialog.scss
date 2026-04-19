@@ -1,0 +1,13 @@
+/* Minimal styling for confirm dialog using design tokens */
+:host {
+  display: block;
+}
+
+mat-dialog-content p {
+  margin: 0;
+  color: var(--text-high);
+}
+
+mat-dialog-actions button {
+  margin-left: var(--space-xs);
+}

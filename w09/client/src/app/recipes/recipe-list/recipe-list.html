@@ -1,0 +1,36 @@
+<section class="recipe-list">
+	<div class="header">
+		<h1 class="page-title">Receptek</h1>
+		<div class="actions">
+			<button mat-button class="recipe-list__logout" (click)="logout()">Kijelentkezés</button>
+			<button mat-flat-button class="recipe-list__add" [routerLink]="['/recipes','new']">Új recept</button>
+		</div>
+	</div>
+
+	<p class="lead" *ngIf="recipes.length === 0">Nincsenek receptek jelenleg.</p>
+
+	<ul class="list" *ngIf="recipes.length > 0">
+		<li *ngFor="let r of recipes; trackBy: trackById" class="item">
+			<mat-card class="recipe-card">
+				<mat-card-header>
+					<mat-card-title>{{ r.title }}</mat-card-title>
+					<mat-card-subtitle>{{ categoryMap.get(r.categoryId)?.name }}</mat-card-subtitle>
+				</mat-card-header>
+
+				<mat-card-content>
+					<p class="recipe-card__desc">{{ r.description }}</p>
+					<div class="recipe-card__content-row">
+						<mat-chip-set role="list">
+							<mat-chip role="listitem">{{ categoryMap.get(r.categoryId)?.name }}</mat-chip>
+						</mat-chip-set>
+						<div class="recipe-card__meta">{{ r.ingredients.length }} hozzávaló</div>
+					</div>
+				</mat-card-content>
+
+				<mat-card-actions>
+					<button mat-button [routerLink]="['/recipes', r.id]">Részletek</button>
+				</mat-card-actions>
+			</mat-card>
+		</li>
+	</ul>
+</section>

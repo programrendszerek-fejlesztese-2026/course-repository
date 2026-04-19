@@ -1,0 +1,36 @@
+/* Card-style for a single rating item */
+.rating-item {
+	display: flex;
+	gap: var(--space-md);
+	align-items: flex-start;
+	padding: var(--space-sm);
+	background: var(--color-surface);
+	border-radius: var(--radius-md);
+	box-shadow: var(--shadow-1);
+	border: 1px solid rgba(0,0,0,0.04);
+
+	.score {
+		background: var(--color-primary);
+		color: var(--color-primary-contrast);
+		padding: var(--space-xs) var(--space-sm);
+		border-radius: var(--radius-sm);
+		font-weight: 700;
+		min-width: 56px;
+		text-align: center;
+		font-size: 1rem;
+	}
+
+	.content {
+		flex: 1 1 auto;
+
+		.comment {
+			margin-bottom: var(--space-xs);
+			white-space: pre-wrap;
+		}
+
+		.meta-small {
+			color: var(--text-muted);
+			font-size: 0.85rem;
+		}
+	}
+}

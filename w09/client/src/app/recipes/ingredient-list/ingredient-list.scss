@@ -1,0 +1,14 @@
+.ingredients {
+	list-style: none;
+	padding: 0;
+	margin: 0 0 var(--space-md) 0;
+
+	li {
+		padding: calc(var(--space-xs) / 2) 0;
+		border-bottom: 1px dashed rgba(0,0,0,0.04);
+	}
+}
+
+.empty {
+	color: var(--text-muted);
+}
