@@ -1,0 +1,68 @@
+@use './styles/tokens';
+// Include theming for Angular Material with `mat.theme()`.
+// This Sass mixin will define CSS variables that are used for styling Angular Material
+// components according to the Material 3 design spec.
+// Learn more about theming and how to use it for your application's
+// custom components at https://material.angular.dev/guide/theming
+@use '@angular/material' as mat;
+
+/* Map Angular Material system variables to our design tokens (CSS custom properties).
+   This makes Material components use our token colors and typography at runtime. */
+:root {
+  --mat-sys-primary: var(--color-primary);
+  --mat-sys-on-primary: var(--color-primary-contrast);
+  --mat-sys-secondary: var(--color-accent);
+  --mat-sys-on-secondary: var(--color-primary-contrast);
+
+  --mat-sys-surface: var(--color-surface);
+  --mat-sys-on-surface: var(--text-high);
+  --mat-sys-background: var(--color-background);
+  --mat-sys-on-background: var(--text-high);
+
+  --mat-sys-body-medium: var(--font-size-base)/var(--line-height-base) var(--font-family-base);
+}
+
+html {
+  height: 100%;
+  @include mat.theme(
+    (
+      // keep typography enabled and density set to 0
+      typography: Roboto,
+      density: 0,
+    )
+  );
+}
+
+body {
+  // Default the application to a light color theme. This can be changed to
+  // `dark` to enable the dark color theme, or to `light dark` to defer to the
+  // user's system settings.
+  color-scheme: light;
+
+  /* Reset the user agent margin and base layout */
+  height: 100%;
+  margin: 0;
+  padding: 0;
+
+  /* Global base styles */
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  color: var(--text-high);
+  background-color: var(--color-background);
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+}
+
+/* SnackBar variant for warnings */
+.snackbar-warn {
+  background-color: var(--color-warn) !important;
+  color: var(--color-primary-contrast) !important;
+}

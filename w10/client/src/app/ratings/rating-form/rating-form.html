@@ -1,0 +1,17 @@
+<form [formGroup]="form" (ngSubmit)="submit()" class="rating-form">
+	<div class="field">
+		<label for="score">Pontszám</label>
+		<select id="score" formControlName="score">
+			<option *ngFor="let s of [5,4,3,2,1]" [value]="s">{{ s }}</option>
+		</select>
+	</div>
+
+	<div class="field">
+		<label for="comment">Megjegyzés</label>
+		<textarea id="comment" formControlName="comment" rows="3" placeholder="Szöveges megjegyzés (opcionális)"></textarea>
+	</div>
+
+	<div class="actions">
+		<button type="submit" class="btn primary" [disabled]="form.invalid">Értékelem</button>
+	</div>
+</form>

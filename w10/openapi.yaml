@@ -1,0 +1,770 @@
+openapi: 3.0.3
+info:
+  title: Receptgyűjtemény API
+  description: MEAN stack alapú receptgyűjtemény webalkalmazás REST API specifikációja.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/api
+paths:
+  /users/register:
+    post:
+      tags: [User]
+      summary: Felhasználó regisztráció
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+            example:
+              username: "janos"
+              email: "janos@example.com"
+              password: "titkosjelszo"
+      responses:
+        '201':
+          description: Sikeres regisztráció
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: Hibás kérés
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: E-mail már létezik
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /users/login:
+    post:
+      tags: [User]
+      summary: Felhasználó bejelentkezés
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+            example:
+              email: "janos@example.com"
+              password: "titkosjelszo"
+      responses:
+        '200':
+          description: Sikeres bejelentkezés (JWT token)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '400':
+          description: Hibás kérés
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Hibás e-mail vagy jelszó
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /users/me:
+    get:
+      tags: [User]
+      summary: Saját profil lekérése
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Saját profil adatai
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '401':
+          description: Nincs jogosultság
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /categories:
+    get:
+      tags: [Category]
+      summary: Kategóriák listázása
+      responses:
+        '200':
+          description: Kategóriák tömbje
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CategoryResponse'
+    post:
+      tags: [Category]
+      summary: Kategória létrehozása
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryCreate'
+            example:
+              name: "Desszert"
+              description: "Édes sütemények és desszertek"
+      responses:
+        '201':
+          description: Sikeres létrehozás
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryResponse'
+        '400':
+          description: Hibás kérés
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Nincs jogosultság
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Admin jogosultság szükséges
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /categories/{id}:
+    put:
+      tags: [Category]
+      summary: Kategória módosítása
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryUpdate'
+            example:
+              name: "Főétel"
+              description: "Meleg főételek"
+      responses:
+        '200':
+          description: Sikeres módosítás
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryResponse'
+        '400':
+          description: Hibás kérés
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Nincs jogosultság
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Admin jogosultság szükséges
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Nem található
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags: [Category]
+      summary: Kategória törlése
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Sikeres törlés
+        '401':
+          description: Nincs jogosultság
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Admin jogosultság szükséges
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Nem található
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /recipes:
+    get:
+      tags: [Recipe]
+      summary: Receptek listázása, szűrés kategóriára
+      parameters:
+        - name: category
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Receptek tömbje
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RecipeResponse'
+    post:
+      tags: [Recipe]
+      summary: Recept létrehozása
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecipeCreate'
+            example:
+              title: "Sajtos pogácsa"
+              description: "Klasszikus magyar pogácsa recept."
+              categoryId: "65f0c1a2e4b0a1a2b3c4d5e6"
+              ingredients:
+                - name: "liszt"
+                  quantity: "500 g"
+                - name: "sajt"
+                  quantity: "200 g"
+                - name: "vaj"
+                  quantity: "100 g"
+      responses:
+        '201':
+          description: Sikeres létrehozás
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeResponse'
+        '400':
+          description: Hibás kérés
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Nincs jogosultság
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Admin jogosultság szükséges
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /recipes/{id}:
+    get:
+      tags: [Recipe]
+      summary: Recept részletei
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Recept adatai
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeResponse'
+        '404':
+          description: Nem található
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      tags: [Recipe]
+      summary: Recept módosítása
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecipeUpdate'
+            example:
+              title: "Sajtos pogácsa (új)"
+              description: "Még finomabb változat."
+              categoryId: "65f0c1a2e4b0a1a2b3c4d5e6"
+              ingredients:
+                - name: "liszt"
+                  quantity: "550 g"
+                - name: "sajt"
+                  quantity: "250 g"
+                - name: "vaj"
+                  quantity: "120 g"
+      responses:
+        '200':
+          description: Sikeres módosítás
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeResponse'
+        '400':
+          description: Hibás kérés
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Nincs jogosultság
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Admin jogosultság szükséges
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Nem található
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags: [Recipe]
+      summary: Recept törlése
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Sikeres törlés
+        '401':
+          description: Nincs jogosultság
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Admin jogosultság szükséges
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Nem található
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /recipes/{id}/ratings:
+    get:
+      tags: [Rating]
+      summary: Recept értékeléseinek listázása
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Értékelések tömbje
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RatingResponse'
+        '404':
+          description: Nem található
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags: [Rating]
+      summary: Értékelés írása recepthez
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RatingCreate'
+            example:
+              score: 5
+              comment: "Nagyon finom lett!"
+      responses:
+        '201':
+          description: Sikeres értékelés
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RatingResponse'
+        '400':
+          description: Hibás kérés
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Nincs jogosultság
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Nem található
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /ratings/{ratingId}:
+    put:
+      tags: [Rating]
+      summary: Saját értékelés módosítása
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: ratingId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RatingUpdate'
+            example:
+              score: 4
+              comment: "Jó lett, de kicsit sós."
+      responses:
+        '200':
+          description: Sikeres módosítás
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RatingResponse'
+        '400':
+          description: Hibás kérés
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Nincs jogosultság
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Csak saját értékelés módosítható
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Nem található
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags: [Rating]
+      summary: Saját vagy admin értékelés törlése
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: ratingId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Sikeres törlés
+        '401':
+          description: Nincs jogosultság
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Csak saját vagy admin jogosultság
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Nem található
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    UserCreate:
+      type: object
+      required: [username, email, password]
+      properties:
+        username:
+          type: string
+          example: "janos"
+        email:
+          type: string
+          example: "janos@example.com"
+        password:
+          type: string
+          example: "titkosjelszo"
+    UserLogin:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          example: "janos@example.com"
+        password:
+          type: string
+          example: "titkosjelszo"
+    UserResponse:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: "65f0b1a2e4b0a1a2b3c4d5e5"
+        username:
+          type: string
+          example: "janos"
+        email:
+          type: string
+          example: "janos@example.com"
+        role:
+          type: string
+          example: "user"
+        createdAt:
+          type: string
+          format: date-time
+          example: "2026-03-09T10:00:00.000Z"
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          example: "eyJhbGciOi..."
+    CategoryCreate:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+          example: "Desszert"
+        description:
+          type: string
+          example: "Édes sütemények és desszertek"
+    CategoryUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Főétel"
+        description:
+          type: string
+          example: "Meleg főételek"
+    CategoryResponse:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: "65f0c1a2e4b0a1a2b3c4d5e6"
+        name:
+          type: string
+          example: "Desszert"
+        description:
+          type: string
+          example: "Édes sütemények és desszertek"
+    Ingredient:
+      type: object
+      required: [name, quantity]
+      properties:
+        name:
+          type: string
+          example: "liszt"
+        quantity:
+          type: string
+          example: "500 g"
+    RecipeCreate:
+      type: object
+      required: [title, description, categoryId, ingredients]
+      properties:
+        title:
+          type: string
+          example: "Sajtos pogácsa"
+        description:
+          type: string
+          example: "Klasszikus magyar pogácsa recept."
+        categoryId:
+          type: string
+          example: "65f0c1a2e4b0a1a2b3c4d5e6"
+        ingredients:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ingredient'
+    RecipeUpdate:
+      type: object
+      properties:
+        title:
+          type: string
+          example: "Sajtos pogácsa (új)"
+        description:
+          type: string
+          example: "Még finomabb változat."
+        categoryId:
+          type: string
+          example: "65f0c1a2e4b0a1a2b3c4d5e6"
+        ingredients:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ingredient'
+    RecipeResponse:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: "65f0c2b3e4b0a1a2b3c4d5e7"
+        title:
+          type: string
+          example: "Sajtos pogácsa"
+        description:
+          type: string
+          example: "Klasszikus magyar pogácsa recept."
+        categoryId:
+          type: string
+          example: "65f0c1a2e4b0a1a2b3c4d5e6"
+        ingredients:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ingredient'
+        createdBy:
+          type: string
+          example: "65f0b1a2e4b0a1a2b3c4d5e5"
+        createdAt:
+          type: string
+          format: date-time
+          example: "2026-03-09T10:15:00.000Z"
+    RatingCreate:
+      type: object
+      required: [score]
+      properties:
+        score:
+          type: integer
+          minimum: 1
+          maximum: 5
+          example: 5
+        comment:
+          type: string
+          example: "Nagyon finom lett!"
+    RatingUpdate:
+      type: object
+      properties:
+        score:
+          type: integer
+          minimum: 1
+          maximum: 5
+          example: 4
+        comment:
+          type: string
+          example: "Jó lett, de kicsit sós."
+    RatingResponse:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: "65f0d3c4e4b0a1a2b3c4d5e8"
+        userId:
+          type: string
+          example: "65f0b1a2e4b0a1a2b3c4d5e5"
+        recipeId:
+          type: string
+          example: "65f0c2b3e4b0a1a2b3c4d5e7"
+        score:
+          type: integer
+          minimum: 1
+          maximum: 5
+          example: 5
+        comment:
+          type: string
+          example: "Nagyon finom lett!"
+        createdAt:
+          type: string
+          format: date-time
+          example: "2026-03-09T10:20:00.000Z"
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "A 'description', 'categoryId' és 'ingredients' mezők kötelezőek."

@@ -1,0 +1,6 @@
+<div *ngIf="!ratings || ratings.length === 0">Még nincs értékelés.</div>
+<ul class="ratings" *ngIf="ratings && ratings.length > 0">
+	<li *ngFor="let rt of ratings; trackBy: trackById">
+		<app-rating-item [rating]="rt"></app-rating-item>
+	</li>
+</ul>

@@ -1,0 +1,43 @@
+/* BEM: block = app-header */
+.app-header {
+	&__toolbar {
+		display: flex;
+		align-items: center;
+		padding: 0 var(--space-md);
+		background-color: var(--color-primary);
+		color: var(--color-primary-contrast);
+	}
+
+	&__brand {
+		font-weight: 500;
+		color: var(--color-primary-contrast);
+		text-decoration: none;
+	}
+
+	&__spacer {
+		flex: 1 1 auto;
+	}
+
+	&__nav {
+		display: flex;
+		gap: var(--space-md);
+		align-items: center;
+	}
+
+	&__nav-item {
+		color: var(--color-primary-contrast);
+		text-decoration: none;
+	}
+
+	/* Ensure Material buttons inside toolbar use our contrast color */
+	.mat-mdc-button, a[mat-button] {
+		color: var(--color-primary-contrast);
+	}
+
+	/* Responsive: hide brand on narrow screens to save space */
+	@media (max-width: 600px) {
+		&__brand {
+			display: none;
+		}
+	}
+}

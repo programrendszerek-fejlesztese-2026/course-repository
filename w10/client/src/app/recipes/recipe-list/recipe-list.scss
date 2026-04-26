@@ -1,0 +1,115 @@
+@use '../../../styles/tokens' as tokens;
+
+.recipe-list {
+	max-width: 980px;
+	margin: var(--space-xxl) auto;
+	padding: 0 var(--space-md);
+
+	.page-title {
+		margin: 0 0 var(--space-md) 0;
+		font-size: var(--h2-size);
+	}
+
+	.list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: grid;
+		gap: var(--space-md);
+		grid-template-columns: 1fr;
+		align-items: stretch;
+	}
+
+	/* Responsive columns using design token breakpoints */
+	@include tokens.respond(sm) {
+		.list {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	@include tokens.respond(md) {
+		.list {
+			grid-template-columns: repeat(3, 1fr);
+		}
+	}
+
+	/* MatCard wrapper tweaks */
+	.recipe-card {
+		background: var(--color-surface);
+		border-radius: var(--radius-md);
+		box-shadow: var(--shadow-1);
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		width: 100%;
+		min-width: 0;
+		flex: 1 1 auto;
+		box-sizing: border-box;
+		align-self: stretch;
+	}
+
+	.recipe-card__desc {
+		margin: 0 0 var(--space-sm) 0;
+		color: var(--text-muted);
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	/* Make card content expand so actions stay at bottom and cards equal height */
+	.list > li.item {
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
+		width: 100%;
+	}
+
+	.recipe-card mat-card-content {
+		flex: 1 1 auto;
+	}
+
+	.recipe-card mat-card-actions {
+		margin-top: auto;
+		display: flex;
+		gap: var(--space-sm);
+	}
+
+	.recipe-card__content-row {
+		display: flex;
+		align-items: center;
+		gap: var(--space-md);
+		margin-top: var(--space-sm);
+	}
+
+	.recipe-card__meta {
+		color: var(--text-muted);
+		font-size: 0.9rem;
+	}
+}
+
+.header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: var(--space-sm);
+
+	.actions {
+		display: flex;
+		gap: var(--space-sm);
+		align-items: center;
+	}
+
+	/* Use MatButton classes but keep token-based colors for flat primary */
+	.recipe-list__add.mat-mdc-button.mat-mdc-button-base,
+	.recipe-list__add[mat-flat-button] {
+		background: var(--color-primary);
+		color: var(--color-primary-contrast);
+	}
+
+	.recipe-list__logout.mat-mdc-button,
+	.recipe-list__logout[mat-button] {
+		color: var(--text-high);
+	}
+}

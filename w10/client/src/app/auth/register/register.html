@@ -1,0 +1,51 @@
+<form [formGroup]="form" (ngSubmit)="register()" class="register-form" novalidate>
+	<h2 class="title">Regisztráció</h2>
+
+	<mat-form-field appearance="outline">
+		<mat-label>Felhasználónév</mat-label>
+		<input matInput id="username" type="text" formControlName="username" placeholder="Felhasználónév" />
+		<mat-error *ngIf="form.get('username')?.invalid && (form.get('username')?.touched || form.get('username')?.dirty)">
+			<span *ngIf="form.get('username')?.errors?.['required']">Felhasználónév megadása kötelező.</span>
+			<span *ngIf="form.get('username')?.errors?.['exists']">Ez a felhasználónév már foglalt.</span>
+		</mat-error>
+	</mat-form-field>
+
+	<mat-form-field appearance="outline">
+		<mat-label>Email</mat-label>
+		<input matInput id="email" type="email" formControlName="email" placeholder="email@example.com" />
+		<mat-error *ngIf="form.get('email')?.invalid && (form.get('email')?.touched || form.get('email')?.dirty)">
+			<span *ngIf="form.get('email')?.errors?.['required']">Email megadása kötelező.</span>
+			<span *ngIf="form.get('email')?.errors?.['email']">Érvényes email cím szükséges.</span>
+			<span *ngIf="form.get('email')?.errors?.['exists']">Ez az email már regisztrálva van.</span>
+		</mat-error>
+	</mat-form-field>
+
+	<mat-form-field appearance="outline">
+		<mat-label>Jelszó</mat-label>
+		<input matInput id="password" [type]="hidePassword ? 'password' : 'text'" formControlName="password" placeholder="Jelszó" />
+		<button type="button" mat-icon-button matSuffix (click)="togglePasswordVisibility()" [attr.aria-label]="hidePassword ? 'Mutasd jelszót' : 'Rejtsd el jelszót'">
+			<mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+		</button>
+		<mat-error *ngIf="form.get('password')?.invalid && (form.get('password')?.touched || form.get('password')?.dirty)">
+			<span *ngIf="form.get('password')?.errors?.['required']">Jelszó megadása kötelező.</span>
+			<span *ngIf="form.get('password')?.errors?.['minlength']">A jelszónak legalább 6 karakter hosszúnak kell lennie.</span>
+		</mat-error>
+	</mat-form-field>
+
+	<mat-form-field appearance="outline">
+		<mat-label>Jelszó ismét</mat-label>
+		<input matInput id="confirmPassword" [type]="hideConfirm ? 'password' : 'text'" formControlName="confirmPassword" placeholder="Jelszó ismét" />
+		<button type="button" mat-icon-button matSuffix (click)="toggleConfirmVisibility()" [attr.aria-label]="hideConfirm ? 'Mutasd jelszót' : 'Rejtsd el jelszót'">
+			<mat-icon>{{ hideConfirm ? 'visibility_off' : 'visibility' }}</mat-icon>
+		</button>
+		<mat-error *ngIf="form.get('confirmPassword')?.invalid && (form.get('confirmPassword')?.touched || form.get('confirmPassword')?.dirty)">
+			<span *ngIf="form.get('confirmPassword')?.errors?.['required']">Ismételt jelszó megadása kötelező.</span>
+			<span *ngIf="form.get('confirmPassword')?.errors?.['mismatch']">A jelszavak nem egyeznek.</span>
+		</mat-error>
+	</mat-form-field>
+
+	<div class="actions">
+		<button mat-flat-button color="primary" type="submit">Regisztráció</button>
+		<button mat-stroked-button type="button" (click)="goToLogin()">Bejelentkezés</button>
+	</div>
+</form>

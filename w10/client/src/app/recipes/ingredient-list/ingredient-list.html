@@ -1,0 +1,9 @@
+<ng-container *ngIf="ingredients && ingredients.length; else empty">
+	<ul class="ingredients">
+		<li *ngFor="let ing of ingredients; trackBy: trackByName">{{ ing.quantity }} — {{ ing.name }}</li>
+	</ul>
+</ng-container>
+
+<ng-template #empty>
+	<div class="empty">Nincsenek hozzávalók.</div>
+</ng-template>

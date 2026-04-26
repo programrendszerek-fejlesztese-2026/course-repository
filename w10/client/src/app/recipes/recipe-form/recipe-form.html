@@ -1,0 +1,42 @@
+<form [formGroup]="form" (ngSubmit)="save()" class="recipe-form">
+	<h2 class="title">{{ isEdit ? 'Recept szerkesztése' : 'Új recept' }}</h2>
+
+	<div class="field">
+		<label for="title">Cím</label>
+		<input id="title" type="text" formControlName="title" placeholder="Recept címe" />
+		<div class="error" *ngIf="form.get('title')?.invalid && (form.get('title')?.touched || form.get('title')?.dirty)">
+			<small *ngIf="form.get('title')?.errors?.['required']">Cím megadása kötelező.</small>
+		</div>
+	</div>
+
+	<div class="field">
+		<label for="category">Kategória</label>
+		<select id="category" formControlName="categoryId">
+			<option value="">-- válassz --</option>
+			<option *ngFor="let c of categories" [value]="c.id">{{ c.name }}</option>
+		</select>
+		<div class="error" *ngIf="form.get('categoryId')?.invalid && (form.get('categoryId')?.touched || form.get('categoryId')?.dirty)">
+			<small>Kategória kiválasztása kötelező.</small>
+		</div>
+	</div>
+
+	<div class="field">
+		<label for="description">Leírás</label>
+		<textarea id="description" formControlName="description" rows="4" placeholder="Rövid leírás"></textarea>
+	</div>
+
+	<div formArrayName="ingredients" class="ingredients">
+		<h3>Hozzávalók</h3>
+		<div *ngFor="let ing of ingredients.controls; let i = index" [formGroupName]="i" class="ingredient-row">
+			<input formControlName="quantity" placeholder="Mennyiség (pl. 2db, 100g)" />
+			<input formControlName="name" placeholder="Hozzávaló neve" />
+			<button type="button" class="btn remove" (click)="removeIngredient(i)">Törlés</button>
+		</div>
+		<button type="button" class="btn" (click)="addIngredient()">Hozzáad</button>
+	</div>
+
+	<div class="actions">
+		<button type="submit" class="btn primary">{{ isEdit ? 'Mentés' : 'Létrehozás' }}</button>
+		<button type="button" class="btn" (click)="cancel()">Mégse</button>
+	</div>
+</form>
